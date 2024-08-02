@@ -1,0 +1,8 @@
+Manager ID: 1234
+Password: pass123
+Manager Name: Brandon S
+------------------------------
+Manager ID: 5678
+Password: pass456
+Manager Name: Peter M
+------------------------------

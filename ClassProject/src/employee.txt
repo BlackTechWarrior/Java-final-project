@@ -1,0 +1,5 @@
+Employee Name: Peter Moses
+Role: member
+Employee ID: 3245
+Schedule: Custom schedule: M-AM, T-AM, W-AM
+------------------------------
