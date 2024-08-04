@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.*;
 
+//similar to the Employee class, the Manager class has a constructor, getters, and methods to authenticate and get the name of the manager.
+
 public class Manager 
 {
     private String name;

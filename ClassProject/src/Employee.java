@@ -12,16 +12,16 @@ public class Employee
     private Map<LocalDate, String> availability; // Map to store availability per date
     private int maxHours;
 
-    public Employee(String name, String id, String password) 
+    public Employee(String name, String id, String password) // Constructor for the Employee class
     {
         this.name = name;
         this.id = id;
         this.password = password;
     }
 
-    public String getName() 
+    public String getName() // Method to get the name of the employee
     {
-        return name;
+        return name; // Return the name of the employee
     }
 
     public String getId() 
@@ -34,26 +34,34 @@ public class Employee
         return password;
     }
 
-    private static final String EMPLOYEE_FILE = "employee.txt";
+    private static final String EMPLOYEE_FILE = "employee.txt"; // File path for the employee file
 
-    public boolean isAvailable(LocalDate date) {
+    public boolean isAvailable(LocalDate date) // Method to check if the employee is available on a given date
+    {
         return availability.containsKey(date);
     }
-    public int getMaxHours() {
-        return maxHours;
+
+    public int getMaxHours() 
+    {
+        return maxHours; // Return the maximum hours the employee can work
     }
 
-    public void setAvailability(Map<LocalDate, String> availability) {
+    public void setAvailability(Map<LocalDate, String> availability) 
+    {
         this.availability = availability;
     }
-    public String getShiftEndTime(LocalDate date) {
-        if (availability.containsKey(date)) {
+
+    public String getShiftEndTime(LocalDate date) // Method to get the end time of the shift for a given date
+    {
+        if (availability.containsKey(date)) 
+        {
             // Assuming availability map stores time in the format "HH:mm-HH:mm"
             return availability.get(date).split("-")[1];
         }
         return "";
     }
-    public String getShiftStartTime(LocalDate date) {
+    public String getShiftStartTime(LocalDate date) 
+    {
         return availability.get(date).split(" - ")[0];
     }
 

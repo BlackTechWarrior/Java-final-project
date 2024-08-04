@@ -1,20 +1,13 @@
-import java.io.Console;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Scanner;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 
 public class SchedulerApp 
 {
 
-    private static final String EMPLOYEE_FILE = "employee.txt";
+    private static final String EMPLOYEE_FILE = "employee.txt"; // File to store employee information
     private static Set<String> existingIDs = new HashSet<>();
 
     public static void main(String[] args) 
@@ -22,27 +15,27 @@ public class SchedulerApp
         loadExistingIDs(); // Load existing IDs from the file
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Welcome to the scheduler.");
+        System.out.println("Welcome to the scheduler."); 
         System.out.print("Are you logging in as the Manager or Employee? ");
-        String role = scanner.nextLine().trim().toLowerCase();
+        String role = scanner.nextLine().trim().toLowerCase(); // Convert to lowercase for easier comparison
         switch (role) 
         {
             case "manager":
-                handleManagerLogin(scanner);
+                handleManagerLogin(scanner); // Handle manager login
                 break;
 
             case "employee":
                 System.out.print("Enter Employee ID (or enter '0000' to create a new employee): ");
-                String employeeID = scanner.nextLine().trim();
+                String employeeID = scanner.nextLine().trim(); // Trimming any leading/trailing whitespaces
 
-                if (employeeID.equals("0000")) 
+                if (employeeID.equals("0000")) // If the user wants to create a new employee
                 {
-                    createNewEmployee(scanner);
+                    createNewEmployee(scanner); //  Create a new employee
                 } 
                 else if (existingIDs.contains(employeeID)) 
                 {
                     employeeID = handleEmployeeLogin(scanner, employeeID);  
-                    // employeeMenu(employeeID);
+                
                 } else 
                 {
                     System.out.println("Invalid ID. Please try again.");
@@ -59,26 +52,26 @@ public class SchedulerApp
 
     public static String handleEmployeeLogin(Scanner scanner, String employeeID) 
     {
-        Console empPassConsole = System.console();
+        Console empPassConsole = System.console(); // For reading password without echoing characters
         String employeePassword;
         if (empPassConsole != null) 
         {
             // If console is available (e.g., when running in a terminal)
             char[] empPasswordArray = empPassConsole.readPassword("Enter Employee Password: ");
-            employeePassword = new String(empPasswordArray);
+            employeePassword = new String(empPasswordArray); // Convert char password array to string. Used to compare & authenticate
         } 
         else 
         {
             // If console is not available (e.g., when running in some IDEs)
-            System.out.print("Enter Employee Password: ");
+            System.out.print("Enter Employee Password: "); 
             employeePassword = scanner.nextLine().trim();
         }
 
         if (Employee.authenticate(employeeID, employeePassword)) 
         {
-            String employeeName = Employee.getEmployeeName(employeeID);
-            System.out.println("Welcome, " + employeeName + "!");
-            employeeMenu(scanner, employeeID);         
+            String employeeName = Employee.getEmployeeName(employeeID); //matches name to ID and prints Welcome, name
+            System.out.println("Welcome, " + employeeName + "!"); 
+            employeeMenu(scanner, employeeID);  // Employee menu
             
         } 
         else 
@@ -91,7 +84,7 @@ public class SchedulerApp
     }
 
     
-
+    //this is a repetation of the employee function but with manager instead of employee
     private static void handleManagerLogin(Scanner scanner) 
     {
         System.out.print("Enter Manager ID: ");
@@ -102,13 +95,11 @@ public class SchedulerApp
         String managerPassword;
         if (manPassConsole != null) 
         {
-            // If console is available (e.g., when running in a terminal)
             char[] passwordArray = manPassConsole.readPassword("Enter Manager Password: ");
             managerPassword = new String(passwordArray);
         } 
         else 
         {
-            // If console is not available (e.g., when running in some IDEs)
             System.out.print("Enter Manager Password: ");
             managerPassword = scanner.nextLine().trim();
         }
@@ -118,7 +109,6 @@ public class SchedulerApp
         {
             String managerName = Manager.getManagerName(managerID);
             System.out.println("Welcome, " + managerName + "!");
-            // will implement manager specific functionality here
             managerMenu(scanner);
         } 
         else 
@@ -127,14 +117,15 @@ public class SchedulerApp
         }
     }
 
-    private static void employeeMenu(Scanner scanner, String authenticatedEmployeeID) 
+    private static void employeeMenu(Scanner scanner, String authenticatedEmployeeID) //employee menu
     {
         boolean exit = false;
     
         while (!exit) {
             System.out.println("Employee Menu:");
             System.out.println("1. View Schedule");
-            System.out.println("2. Exit");
+            System.out.println("2. Ping My Manager");
+            System.out.println("3. Exit");
     
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
@@ -143,10 +134,13 @@ public class SchedulerApp
             switch (choice) 
             {
                 case 1:
-                    Schedule.viewLoggedInEmployeeSchedule(authenticatedEmployeeID);
+                    Schedule.viewLoggedInEmployeeSchedule(authenticatedEmployeeID); //view your schedule
                     break;
                 case 2:
-                    exit = true;
+                    pingMyManager(scanner, authenticatedEmployeeID); //ping your manager ie make requests, ask questions, etc
+                    break;
+                case 3:
+                    exit = true; //exits the program
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -157,36 +151,41 @@ public class SchedulerApp
     private static void managerMenu(Scanner scanner) 
     {
         boolean exit = false;
-        boolean shiftsAssigned = false;
+        boolean shiftsAssigned = false; // Check if, this is to allow that the shifts are assigned before viewing the schedule
 
         while (!exit) {
             System.out.println("\nManager Menu:");
             System.out.println("1. Auto-Assign Shifts");
             System.out.println("2. View Weekly Schedule");
-            System.out.println("3. Exit");
+            System.out.println("3. View Pings");
+            System.out.println("4. Exit");
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
+            scanner.nextLine();
 
             switch (choice) 
             {
                 case 1:
-                    List<Schedule.Employee> employees = Schedule.parseEmployeeFile("employee.txt");
-                    Schedule.autoAssignShifts(employees);
+                    List<Schedule.Employee> employees = Schedule.parseEmployeeFile("employee.txt"); // Parsing the employee file
+                    Schedule.autoAssignShifts(employees); // Auto-assign shifts based on schedule availability from the parsed employees
                     System.out.println("Shifts have been auto-assigned.");
-                    shiftsAssigned = true;
+                    shiftsAssigned = true; // Set to true after shifts are assigned
                     break;
                 case 2:
                     if (shiftsAssigned) 
                     {
-                        Schedule.viewWeeklySchedule();
+                        Schedule.viewWeeklySchedule(); // View the weekly schedule
                     } 
                     else 
                     {
-                        System.out.println("Please auto-assign shifts first.");
+                        System.out.println("Please auto-assign shifts first."); // If shifts are not assigned, prompt to auto-assign first
                     }
                     break;
                 case 3:
+                    viewPings(); // View pings from employees
+                    break;
+                case 4:
                     exit = true;
                     break;
                 default:
@@ -195,42 +194,40 @@ public class SchedulerApp
         }
     }
 
-    private static void createNewEmployee(Scanner scanner) 
+    private static void createNewEmployee(Scanner scanner)  //create a new employee
     {
         System.out.println("New Employee Setup");
 
-        String newID = generateUniqueID(scanner);
+        String newID = generateUniqueID(scanner); // Generate a unique 4-digit ID for the new employee
         
-        System.out.print("Enter your role (lead/member): ");
-        String role = scanner.nextLine().trim().toLowerCase();
+        System.out.print("Enter your role (lead/member): "); // Ask for the role
+        String role = scanner.nextLine().trim().toLowerCase(); // Convert to lowercase for easier comparison, and trims any leading/trailing whitespaces
 
-        System.out.print("Enter your name: ");
+        System.out.print("Enter your name: ");  // Ask for the name
         String name = scanner.nextLine().trim();
 
-        String password = "";  // Define password variable here
+        String password = ""; // Initialize password
 
         while (true) 
         {
-            Console createEmpPassConsole = System.console();
+            Console createEmpPassConsole = System.console(); // For reading password without echoing characters
             if (createEmpPassConsole != null) 
             {
-                // If console is available (e.g., when running in a terminal)
                 char[] createEmpPasswordArray = createEmpPassConsole.readPassword("Create a Password: ");
                 password = new String(createEmpPasswordArray);
             } 
             else 
             {
-                // If console is not available (e.g., when running in some IDEs)
                 System.out.print("Create a Password: ");
                 password = scanner.nextLine().trim();
             }
 
-            System.out.print("Confirm Password: ");
-            String confirmPassword = scanner.nextLine().trim();
+            System.out.print("Confirm Password: "); // Confirm the password, no need to hide to help the user confirm
+            String confirmPassword = scanner.nextLine().trim(); 
 
             if (password.equals(confirmPassword)) 
             {
-                break;
+                break; // Break out of the loop if the passwords match
             } 
             else 
             {
@@ -238,16 +235,16 @@ public class SchedulerApp
             }
         }
         
-        String schedule = "";
+        String schedule = ""; // Initializing the schedule and schedule preference
         String schedulePreference = "";
         if (role.equals("lead")) 
         {
             System.out.println("\nAs a Lead, your schedule will be set to full-time.");
             System.out.println("This will be divided out accordingly during the week.");
-            String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-            for (String day : daysOfWeek) 
+            String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}; // Days of the week
+            for (String day : daysOfWeek)  // Loop through the days of the week
             {
-                schedule += day + ": Open\n";
+                schedule += day + ": Open\n"; // Setting the schedule to open for each day
                 if (day.equals(daysOfWeek[6])) 
                 {
                     schedule += ": Open";
@@ -258,14 +255,14 @@ public class SchedulerApp
         else if (role.equals("member")) 
         {
             System.out.println("\nAs a Member, you can customize your schedule.");
-            System.out.print("What's your shift preference? (Part time/ full time)? ");
+            System.out.print("What's your shift preference? (Part time/ full time)? "); // Ask for the shift preference
             String shiftPreference = scanner.nextLine().trim();
             
             while (true) 
             {
                 if (shiftPreference.equalsIgnoreCase("part time")) 
                 {
-                    System.out.print("How many hours per week? ");
+                    System.out.print("How many hours per week? "); // Ask for the number of hours to work per week
                     int hours = scanner.nextInt();
                     scanner.nextLine(); // Consume the newline character
                     if(hours < 8)
@@ -291,51 +288,24 @@ public class SchedulerApp
                 else 
                 {
                     System.out.println("Invalid shift preference. Please enter 'part time' or 'full time'.");
-                    return; // You may loop back or handle this differently.
+                    return; 
                 }
                 
             }
-            if (shiftPreference.equalsIgnoreCase("part time")) 
-            {
-                System.out.print("How many hours per week? ");
-                int hours = scanner.nextInt();
-                scanner.nextLine(); // Consume the newline character
-                if(hours < 8)
-                {
-                    System.out.println("Invalid hours. Please enter at least 8 hours.");
-                    return;
-                }
-                else
-                {
-                    schedulePreference = "Part-time (" + hours + " hours)";
-                    schedule = setCustomSchedule(scanner);
-                }
-            } 
+        }
 
-            else if (shiftPreference.equalsIgnoreCase("full time")) 
-            {
-                schedulePreference = "Full-time (40 hours)";
-                schedule = setCustomSchedule(scanner);
-            } 
-
-            else 
-            {
-                System.out.println("Invalid shift preference. Please enter 'part time' or 'full time'.");
-                return; // You may loop back or handle this differently.
-            }
-        } 
         else 
         {
             System.out.println("Invalid role. Please enter 'lead' or 'member'.");
-            return; // You may loop back or handle this differently.
+            return; // can add loop to re-enter role
         }
 
-        saveEmployeeToFile(newID, role, name, password, schedulePreference, schedule);
+        saveEmployeeToFile(newID, role, name, password, schedulePreference, schedule); // Save the employee information to the file
 
-        System.out.println("Employee created successfully! You can now log in using your new ID and password.");
+        System.out.println("Employee created successfully! You can now log in using your new ID and password."); // Confirmation message
     }
 
-    private static String generateUniqueID(Scanner scanner) 
+    private static String generateUniqueID(Scanner scanner)  //generate a unique ID ie is not 0000, is 4 digits, and is not already in use
     {
         String newID;
         do 
@@ -357,15 +327,16 @@ public class SchedulerApp
         } 
         while (newID.equals("0000") || newID.length() != 4 || !newID.matches("\\d+") || existingIDs.contains(newID));
 
-        existingIDs.add(newID);
-        return newID;
+        existingIDs.add(newID); // Add the new ID to the existing IDs set
+        return newID; // Return the new ID 
     }
 
-    private static String setCustomSchedule(Scanner scanner) 
+    private static String setCustomSchedule(Scanner scanner) //set a custom schedule for employee Member
     {
         StringBuilder schedule = new StringBuilder();
         String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         
+        //print statements to explain schedule input
         System.out.println("Enter your availability for each day: \n");
         System.out.println("AM: Morning (8am - 12pm), PM: Afternoon (1pm - 5pm), EV: Evening (6pm - 11pm), Overnight: (12am - 7am), off: Off, Open: Open");
         System.out.println("Example: 'AM', 'PM', 'EV', 'Overnight', 'off', 'Open'");
@@ -377,9 +348,9 @@ public class SchedulerApp
         {
             String day = daysOfWeek[i];
             System.out.print(day + ": ");
-            String availability = scanner.nextLine().trim();
+            String availability = scanner.nextLine().trim(); 
     
-            availability = availability.isEmpty() ? "Off" : availability;
+            availability = availability.isEmpty() ? "Off" : availability; // Set to 'Off' if the input is empty
 
             if (availability.equalsIgnoreCase("custom")) 
             {
@@ -401,13 +372,13 @@ public class SchedulerApp
                 }
             }
     
-            schedule.append(day).append(": ").append(availability).append("\n");
+            schedule.append(day).append(": ").append(availability).append("\n"); // Add the availability to the schedule
         }
         
-        return schedule.toString().trim();
+        return schedule.toString().trim(); // Return the schedule as a string
     }
     
-    private static boolean isValidCustomTime(String startTime, String endTime) 
+    private static boolean isValidCustomTime(String startTime, String endTime) //validate custom time for employee Member ie at least 4 hours
     {
         try 
         {
@@ -434,27 +405,27 @@ public class SchedulerApp
     
     
 
-    private static void saveEmployeeToFile(String id, String role, String name, String password, String schedulePreference, String schedule) 
+    private static void saveEmployeeToFile(String id, String role, String name, String password, String schedulePreference, String schedule) //save employee info to file
     {
-        try (FileWriter writer = new FileWriter(EMPLOYEE_FILE, true)) 
+        try (FileWriter writer = new FileWriter(EMPLOYEE_FILE, true)) // Append to the file
         {
             writer.write("Employee ID: " + id + "\n");
             writer.write("Role: " + role + "\n");
             writer.write("Employee Name: " + name + "\n");
-            writer.write("Password: " + password + "\n"); // Save the password
+            writer.write("Password: " + password + "\n"); 
             writer.write("Schedule Preference: " + schedulePreference + "\n");
             writer.write("Schedule: \n" + schedule + "\n");
             writer.write("------------------------------\n");
             System.out.println("Employee information saved successfully.");
         } 
-        catch (IOException e) 
+        catch (IOException e) // Catch any exceptions that occur during the file writing process
         {
             System.out.println("An error occurred while saving employee information.");
-            e.printStackTrace();
+            e.printStackTrace(); // Print the stack trace of the exception
         }
     }
 
-    private static void loadExistingIDs() 
+    private static void loadExistingIDs() //load existing IDs from file
     {
         File file = new File(EMPLOYEE_FILE);
         if (!file.exists()) 
@@ -463,15 +434,15 @@ public class SchedulerApp
             return;
         }
 
-        try (Scanner fileScanner = new Scanner(file)) 
+        try (Scanner fileScanner = new Scanner(file)) // Read the file line by line
         {
             while (fileScanner.hasNextLine()) 
             {
                 String line = fileScanner.nextLine();
-                if (line.startsWith("Employee ID: ")) 
+                if (line.startsWith("Employee ID: "))  // Check if the line contains an employee ID
                 {
-                    String id = line.substring(13).trim();
-                    existingIDs.add(id);
+                    String id = line.substring(13).trim(); // Extract the ID from the line
+                    existingIDs.add(id); // Add the ID to the existing IDs set
                 }
             }
         } 
@@ -481,4 +452,99 @@ public class SchedulerApp
             e.printStackTrace();
         }
     }
+
+    private static void pingMyManager(Scanner scanner, String employeeID) //ping manager ie make requests, ask questions, etc
+    {
+        String employeeName = Employee.getEmployeeName(employeeID); // Get the employee name from the ID to include in the ping
+
+        System.out.println("\nPing My Manager");
+        System.out.println("1. Request Extra Hours");
+        System.out.println("2. Request a Shift Swap");
+        System.out.println("3. Request a Shift Drop");
+        System.out.println("4. Ask a Question");
+        System.out.println("5. Schedule a Meeting");
+        System.out.print("Choose an option (1-5): ");
+        
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+        String pingMessage = "";
+    
+        switch (choice) 
+        {
+            case 1:
+                System.out.print("Enter your request for extra hours: ");
+                pingMessage = "Request Extra Hours: " + scanner.nextLine();
+                break;
+            case 2:
+                System.out.print("Enter the shift swap request details: ");
+                pingMessage = "Request Shift Swap: " + scanner.nextLine();
+                break;
+            case 3:
+                System.out.print("Enter the shift you want to drop: ");
+                pingMessage = "Request Shift Drop: " + scanner.nextLine();
+                break;
+            case 4:
+                System.out.print("Enter your question: ");
+                pingMessage = "Question: " + scanner.nextLine();
+                break;
+            case 5:
+                System.out.print("Enter the details for scheduling a meeting: ");
+                pingMessage = "Schedule Meeting: " + scanner.nextLine();
+                break;
+            default:
+                System.out.println("Invalid option.");
+                return;
+        }
+    
+        // Save the ping message to ping.txt
+        try (FileWriter writer = new FileWriter("ping.txt", true)) 
+        {
+            writer.write("Employee ID: " + employeeID + "\n");
+            writer.write("Employee Name: " + employeeName + "\n");
+            writer.write(pingMessage + "\n");
+            writer.write("----------------------------------\n");
+            System.out.println("Ping sent to the manager.");
+        } 
+        catch (IOException e) 
+        {
+            System.out.println("Error saving the ping: " + e.getMessage()); // Print the error message if an exception occurs
+        }
+    }
+
+    private static void viewPings() //view pings from employees
+    {
+        File pingFile = new File("ping.txt"); // Check if the ping file exists
+    
+        if (!pingFile.exists()) 
+        {
+            System.out.println("No pings available.");
+            return;
+        }
+    
+        System.out.println("\nViewing Pings:");
+        try (BufferedReader reader = new BufferedReader(new FileReader(pingFile))) // Read the pings from the file
+        {
+            String line;
+            while ((line = reader.readLine()) != null) // Read each line until the end of the file
+            {
+                System.out.println(line);
+            }
+        } 
+        catch (IOException e) 
+        {
+            System.out.println("Error reading pings: " + e.getMessage());
+        }
+    
+        // Delete the ping.txt file after viewing. Like snapChat
+        if (pingFile.delete()) 
+        {
+            System.out.println("Pings have been marked as read and deleted."); // Confirmation message
+        } 
+        else 
+        {
+            System.out.println("Error deleting the ping file.");
+        }
+    }
+    
 }
+
