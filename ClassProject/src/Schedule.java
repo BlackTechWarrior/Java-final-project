@@ -113,6 +113,7 @@ public class Schedule
         Map<String, Integer> leadShiftsPerDay = new HashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy"); // Date format for shift assignments
         Calendar startDate = Calendar.getInstance(); // Start date for the schedule
+        startDate.add(Calendar.DATE, 1);
         Calendar endDate = (Calendar) startDate.clone(); // End date for the schedule
         endDate.add(Calendar.DATE, 6); // Schedule for a week
     
