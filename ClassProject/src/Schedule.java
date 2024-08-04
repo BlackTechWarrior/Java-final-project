@@ -315,4 +315,54 @@ public class Schedule
             e.printStackTrace();
         }
     }
+
+    public static void viewLoggedInEmployeeSchedule(String employeeID) 
+    {
+        File file = new File("schedule.txt");
+        boolean employeeFound = false;
+        StringBuilder schedule = new StringBuilder();
+
+        try (Scanner scanner = new Scanner(file)) 
+        {
+            while (scanner.hasNextLine()) 
+            {
+                String line = scanner.nextLine();
+
+                // Check if the current line contains the Employee ID
+                if (line.contains("Employee ID: " + employeeID)) 
+                {
+                    employeeFound = true;
+                
+                    scanner.nextLine(); 
+                    while (scanner.hasNextLine()) 
+                    {
+                        line = scanner.nextLine();
+                        if (line.startsWith("Employee ID:") && !line.contains(employeeID)) 
+                        {
+                            break; // Stop reading when reaching the next employee
+                        }
+                        schedule.append(line).append("\n"); // Add the rest of the employee's data
+                    }
+                    break;
+                }
+            }
+
+            if (employeeFound) 
+            {
+                System.out.println("\nHere's your upcoming schedule:");
+                System.out.println(schedule.toString());
+            } 
+            else 
+            {
+                System.out.println("Employee not found.");
+            }
+
+        } 
+        catch (FileNotFoundException e) 
+        {
+            System.out.println("An error occurred while reading the file.");
+            e.printStackTrace();
+        }
+    }
+
 }

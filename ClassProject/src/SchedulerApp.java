@@ -57,8 +57,8 @@ public class SchedulerApp
         scanner.close();
     }
 
-    private static String handleEmployeeLogin(Scanner scanner, String employeeID) 
-    { 
+    public static String handleEmployeeLogin(Scanner scanner, String employeeID) 
+    {
         Console empPassConsole = System.console();
         String employeePassword;
         if (empPassConsole != null) 
@@ -78,15 +78,19 @@ public class SchedulerApp
         {
             String employeeName = Employee.getEmployeeName(employeeID);
             System.out.println("Welcome, " + employeeName + "!");
-            // will add employee specific functionality here
+            employeeMenu(scanner, employeeID);         
+            
         } 
         else 
         {
             System.out.println("Invalid ID or Password. Please try again.");
+            return null;
         }
 
         return employeeID; // Return the employeeID to be used in the switch case
     }
+
+    
 
     private static void handleManagerLogin(Scanner scanner) 
     {
@@ -120,6 +124,33 @@ public class SchedulerApp
         else 
         {
             System.out.println("Invalid ID or Password. Please try again.");
+        }
+    }
+
+    private static void employeeMenu(Scanner scanner, String authenticatedEmployeeID) 
+    {
+        boolean exit = false;
+    
+        while (!exit) {
+            System.out.println("Employee Menu:");
+            System.out.println("1. View Schedule");
+            System.out.println("2. Exit");
+    
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+    
+            switch (choice) 
+            {
+                case 1:
+                    Schedule.viewLoggedInEmployeeSchedule(authenticatedEmployeeID);
+                    break;
+                case 2:
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
         }
     }
 
