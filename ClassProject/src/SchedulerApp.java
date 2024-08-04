@@ -122,7 +122,9 @@ public class SchedulerApp
             System.out.println("Invalid ID or Password. Please try again.");
         }
     }
-    private static void managerMenu(Scanner scanner) {
+
+    private static void managerMenu(Scanner scanner) 
+    {
         boolean exit = false;
         boolean shiftsAssigned = false;
 
@@ -135,7 +137,8 @@ public class SchedulerApp
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
 
-            switch (choice) {
+            switch (choice) 
+            {
                 case 1:
                     List<Schedule.Employee> employees = Schedule.parseEmployeeFile("employee.txt");
                     Schedule.autoAssignShifts(employees);
@@ -143,9 +146,12 @@ public class SchedulerApp
                     shiftsAssigned = true;
                     break;
                 case 2:
-                    if (shiftsAssigned) {
+                    if (shiftsAssigned) 
+                    {
                         Schedule.viewWeeklySchedule();
-                    } else {
+                    } 
+                    else 
+                    {
                         System.out.println("Please auto-assign shifts first.");
                     }
                     break;
