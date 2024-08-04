@@ -1,5 +1,196 @@
+Employee ID: 6574
+Role: lead
 Employee Name: Peter Moses
+Password: Atambo@2003
+Schedule Preference: Full-time (40 hours)
+Schedule: 
+Monday: Open
+Tuesday: Open
+Wednesday: Open
+Thursday: Open
+Friday: Open
+Saturday: Open
+Sunday: Open
+------------------------------
+Employee ID: 2345
 Role: member
-Employee ID: 3245
-Schedule: Custom schedule: M-AM, T-AM, W-AM
+Employee Name: Eugine Ogaro
+Password: Ogaro@ball
+Schedule Preference: Full-time (40 hours)
+Schedule: 
+Monday: AM
+Tuesday: PM
+Wednesday: Open
+Thursday: Off
+Friday: AM,PM
+Saturday: EV
+Sunday: Off
+------------------------------
+Employee ID: 0707
+Role: member
+Employee Name: Rusty Jarvis
+Password: Rjarvis
+Schedule Preference: Part-time (30 hours)
+Schedule: 
+Monday: Custom (06:00 - 12:00)
+Tuesday: AM
+Wednesday: PM
+Thursday: Custom (15:00 - 23:00)
+Friday: Off
+Saturday: Open
+Sunday: PM,EV
+------------------------------
+Employee ID: 1234
+Role: member
+Employee Name: Brandon Brice
+Password: b@brice
+Schedule Preference: Part-time (24 hours)
+Schedule: 
+Monday: Custom (08:00 - 15:00)
+Tuesday: AM,PM
+Wednesday: Overnight
+Thursday: Off
+Friday: Off
+Saturday: Open
+Sunday: Off
+------------------------------
+Employee ID: 4523
+Role: member
+Employee Name: Robin Su
+Password: surob
+Schedule Preference: Part-time (24 hours)
+Schedule: 
+Monday: Custom (12:00 - 23:00)
+Tuesday: AM, PM
+Wednesday: Off
+Thursday: Open
+Friday: Off
+Saturday: PM,EV
+Sunday: Open
+------------------------------
+Employee ID: 0234
+Role: lead
+Employee Name: Rachel Smith
+Password: smithyr
+Schedule Preference: Full-time (40 hours)
+Schedule: 
+Monday: Open
+Tuesday: Open
+Wednesday: Open
+Thursday: Open
+Friday: Open
+Saturday: Open
+Sunday: Open
+------------------------------
+Employee ID: 3113
+Role: lead
+Employee Name: Patrick David
+Password: patdave
+Schedule Preference: Full-time (40 hours)
+Schedule: 
+Monday: Open
+Tuesday: Open
+Wednesday: Open
+Thursday: Open
+Friday: Open
+Saturday: Open
+Sunday: Open
+------------------------------
+Employee ID: 4093
+Role: member
+Employee Name: Samantha Briggs
+Password: officialsambriggs
+Schedule Preference: Part-time (16 hours)
+Schedule: 
+Monday: Off
+Tuesday: PM
+Wednesday: AM
+Thursday: PM
+Friday: Off
+Saturday: Off
+Sunday: Off
+------------------------------
+Employee ID: 3400
+Role: member
+Employee Name: Patricia Jones
+Password: jonesmypat
+Schedule Preference: Part-time (20 hours)
+Schedule: 
+Monday: 
+Tuesday: AM
+Wednesday: PM
+Thursday: PM
+Friday: PM
+Saturday: Off
+Sunday: Off
+------------------------------
+Employee ID: 1028
+Role: member
+Employee Name: Pui Khuptong
+Password: redhot123
+Schedule Preference: Part-time (30 hours)
+Schedule: 
+Monday: AM
+Tuesday: Custom (17:00 - 21:00)
+Wednesday: PM
+Thursday: EV
+Friday: PM, EV
+Saturday: Off
+Sunday: Off
+------------------------------
+Employee ID: 9965
+Role: member
+Employee Name: Sam Mekenye
+Password: mekenyee
+Schedule Preference: Full-time (40 hours)
+Schedule: 
+Monday: AM
+Tuesday: Off
+Wednesday: Open
+Thursday: Open
+Friday: Open
+Saturday: AM
+Sunday: Off
+------------------------------
+Employee ID: 3459
+Role: lead
+Employee Name: Spongebob Squarepants
+Password: bikinibot
+Schedule Preference: Full-time (40 hours)
+Schedule: 
+Monday: Open
+Tuesday: Open
+Wednesday: Open
+Thursday: Open
+Friday: Open
+Saturday: Open
+Sunday: Open
+------------------------------
+Employee ID: 9990
+Role: member
+Employee Name: basil leaf
+Password: leaf
+Schedule Preference: Full-time (40 hours)
+Schedule: 
+Monday: PM, EV
+Tuesday: open
+Wednesday: open
+Thursday: Off
+Friday: Off
+Saturday: off
+Sunday: open
+------------------------------
+Employee ID: 8731
+Role: lead
+Employee Name: Jui Jitsu
+Password: juji
+Schedule Preference: Full-time (40 hours)
+Schedule: 
+Monday: Open
+Tuesday: Open
+Wednesday: Open
+Thursday: Open
+Friday: Open
+Saturday: Open
+Sunday: Open
 ------------------------------

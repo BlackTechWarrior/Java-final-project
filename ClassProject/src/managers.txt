@@ -1,8 +1,5 @@
-Manager ID: 1234
-Password: pass123
-Manager Name: Brandon S
-------------------------------
-Manager ID: 5678
-Password: pass456
-Manager Name: Peter M
-------------------------------
+1234,pass123,Brandon S
+5678,pass456,Robin S
+9012,pass789,Peter M
+
+
