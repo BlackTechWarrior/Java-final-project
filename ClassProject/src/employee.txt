@@ -194,3 +194,17 @@ Friday: Open
 Saturday: Open
 Sunday: Open
 ------------------------------
+Employee ID: 0909
+Role: member
+Employee Name: Dave Chapelle
+Password: chapelle
+Schedule Preference: Full-time (40 hours)
+Schedule: 
+Monday: Open
+Tuesday: Open
+Wednesday: Open
+Thursday: Open
+Friday: Off
+Saturday: Open
+Sunday: Overnight
+------------------------------
