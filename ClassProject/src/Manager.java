@@ -31,7 +31,7 @@ public class Manager
         return password;
     }
 
-    private static final String MANAGER_FILE = "managers.txt";
+    private static final String MANAGER_FILE = "src/managers.txt";
 
     public static boolean authenticate(String managerID, String managerPassword) 
     {

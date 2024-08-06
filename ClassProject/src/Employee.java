@@ -34,7 +34,7 @@ public class Employee
         return password;
     }
 
-    private static final String EMPLOYEE_FILE = "employee.txt"; // File path for the employee file
+    private static final String EMPLOYEE_FILE = "src/employee.txt"; // File path for the employee file
 
     public boolean isAvailable(LocalDate date) // Method to check if the employee is available on a given date
     {

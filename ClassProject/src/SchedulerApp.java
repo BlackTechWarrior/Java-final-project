@@ -3,11 +3,10 @@ import java.text.SimpleDateFormat;
 import java.io.*;
 import java.util.*;
 
-
 public class SchedulerApp 
 {
 
-    private static final String EMPLOYEE_FILE = "employee.txt"; // File to store employee information
+    private static final String EMPLOYEE_FILE = "src/employee.txt"; // File to store employee information
     private static Set<String> existingIDs = new HashSet<>();
 
     public static void main(String[] args) 
@@ -167,7 +166,7 @@ public class SchedulerApp
             switch (choice) 
             {
                 case 1:
-                    List<Schedule.Employee> employees = Schedule.parseEmployeeFile("employee.txt"); // Parsing the employee file
+                    List<Schedule.Employee> employees = Schedule.parseEmployeeFile("src/employee.txt"); // Parsing the employee file
                     Schedule.autoAssignShifts(employees); // Auto-assign shifts based on schedule availability from the parsed employees
                     System.out.println("Shifts have been auto-assigned.");
                     shiftsAssigned = true; // Set to true after shifts are assigned
@@ -497,7 +496,7 @@ public class SchedulerApp
         }
     
         // Save the ping message to ping.txt
-        try (FileWriter writer = new FileWriter("ping.txt", true)) 
+        try (FileWriter writer = new FileWriter("src/ping.txt", true)) 
         {
             writer.write("Employee ID: " + employeeID + "\n");
             writer.write("Employee Name: " + employeeName + "\n");
@@ -513,7 +512,7 @@ public class SchedulerApp
 
     private static void viewPings() //view pings from employees
     {
-        File pingFile = new File("ping.txt"); // Check if the ping file exists
+        File pingFile = new File("src/ping.txt"); // Check if the ping file exists
     
         if (!pingFile.exists()) 
         {

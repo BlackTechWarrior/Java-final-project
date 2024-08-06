@@ -211,7 +211,7 @@ public class Schedule
         }
     
         // Write assigned shifts to schedule.txt
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("schedule.txt"))) 
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/schedule.txt"))) 
         {
             bw.write("Here's the list of shifts generated starting date " + sdf.format(startDate.getTime()) + "\n\n"); // Write the start date
             for (Map.Entry<String, List<String>> entry : shiftAssignments.entrySet()) // Loop through the assigned shifts
@@ -306,7 +306,7 @@ public class Schedule
     // Function to view the weekly schedule
     public static void viewWeeklySchedule() 
     {
-        try (BufferedReader br = new BufferedReader(new FileReader("schedule.txt"))) 
+        try (BufferedReader br = new BufferedReader(new FileReader("src/schedule.txt"))) 
         {
             String line;
             while ((line = br.readLine()) != null) 
@@ -322,7 +322,7 @@ public class Schedule
 
     public static void viewLoggedInEmployeeSchedule(String employeeID) // Function to view the schedule of a logged-in employee
     {
-        File file = new File("schedule.txt");
+        File file = new File("src/schedule.txt");
         boolean employeeFound = false;
         StringBuilder schedule = new StringBuilder();
 
@@ -358,7 +358,7 @@ public class Schedule
             } 
             else 
             {
-                System.out.println("Employee not found.");
+                System.out.println("\nEmployee not found.\n");
             }
 
         } 

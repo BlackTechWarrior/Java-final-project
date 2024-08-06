@@ -208,3 +208,17 @@ Friday: Off
 Saturday: Open
 Sunday: Overnight
 ------------------------------
+Employee ID: 9090
+Role: member
+Employee Name: Truce Bruce
+Password: trubrew
+Schedule Preference: Part-time (8 hours)
+Schedule: 
+Monday: Off
+Tuesday: Off
+Wednesday: Off
+Thursday: off
+Friday: PM,EV
+Saturday: Off
+Sunday: Off
+------------------------------
