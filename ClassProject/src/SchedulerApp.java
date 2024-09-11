@@ -10,45 +10,56 @@ public class SchedulerApp
     private static Set<String> existingIDs = new HashSet<>();
 
     public static void main(String[] args) 
-    {
-        loadExistingIDs(); // Load existing IDs from the file
-        Scanner scanner = new Scanner(System.in);
+{
+    loadExistingIDs(); // Load existing IDs from the file
+    Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Welcome to the scheduler."); 
-        System.out.print("Are you logging in as the Manager or Employee? ");
-        String role = scanner.nextLine().trim().toLowerCase(); // Convert to lowercase for easier comparison
-        switch (role) 
-        {
-            case "manager":
-                handleManagerLogin(scanner); // Handle manager login
-                break;
+    boolean running = true;
+    while (running) {
+        System.out.println("\nWelcome to the scheduler.");
+        System.out.println("1. Login");
+        System.out.println("2. Exit");
+        System.out.print("Choice: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
 
-            case "employee":
-                System.out.print("Enter Employee ID (or enter '0000' to create a new employee): ");
-                String employeeID = scanner.nextLine().trim(); // Trimming any leading/trailing whitespaces
-
-                if (employeeID.equals("0000")) // If the user wants to create a new employee
+        switch (choice) {
+            case 1:
+                System.out.print("Are you logging in as the Manager or Employee? ");
+                String role = scanner.nextLine().trim().toLowerCase();
+                switch (role) 
                 {
-                    createNewEmployee(scanner); //  Create a new employee
-                } 
-                else if (existingIDs.contains(employeeID)) 
-                {
-                    employeeID = handleEmployeeLogin(scanner, employeeID);  
-                
-                } else 
-                {
-                    System.out.println("Invalid ID. Please try again.");
+                    case "manager":
+                        handleManagerLogin(scanner);
+                        break;
+                    case "employee":
+                        System.out.print("Enter Employee ID (or enter '0000' to create a new employee): ");
+                        String employeeID = scanner.nextLine().trim();
+                        if (employeeID.equals("0000")) {
+                            createNewEmployee(scanner);
+                        } else if (existingIDs.contains(employeeID)) {
+                            employeeID = handleEmployeeLogin(scanner, employeeID);
+                        } else {
+                            System.out.println("Invalid ID. Please try again.");
+                        }
+                        break;
+                    default:
+                        System.out.println("Invalid option. Please choose either 'Manager' or 'Employee'.");
+                        break;
                 }
                 break;
-
+            case 2:
+                running = false;
+                System.out.println("Thank you for using the scheduler. Goodbye!");
+                break;
             default:
-                System.out.println("Invalid option. Please choose either 'Manager' or 'Employee'.");
+                System.out.println("Invalid choice. Please try again.");
                 break;
         }
-
-        scanner.close();
     }
 
+    scanner.close();
+}
     public static String handleEmployeeLogin(Scanner scanner, String employeeID) 
     {
         Console empPassConsole = System.console(); // For reading password without echoing characters
@@ -124,7 +135,9 @@ public class SchedulerApp
             System.out.println("Employee Menu:");
             System.out.println("1. View Schedule");
             System.out.println("2. Ping My Manager");
-            System.out.println("3. Exit");
+            System.out.println("3. View My Ping Responses");
+            System.out.println("4. Update My Schedule");
+            System.out.println("5. Exit");
     
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
@@ -139,7 +152,13 @@ public class SchedulerApp
                     pingMyManager(scanner, authenticatedEmployeeID); //ping your manager ie make requests, ask questions, etc
                     break;
                 case 3:
-                    exit = true; //exits the program
+                    viewMyPingResponses(scanner, authenticatedEmployeeID); //view responses to your pings
+                    break;
+                case 4:
+                    updateEmployeeSchedule(scanner, authenticatedEmployeeID); //update your schedule
+                    break;
+                case 5:
+                    exit = true; // Exit the program
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -152,12 +171,18 @@ public class SchedulerApp
         boolean exit = false;
         boolean shiftsAssigned = false; // Check if, this is to allow that the shifts are assigned before viewing the schedule
 
+        if ("schedule.txt" != null) // Check if the schedule file is not empty
+        {
+            shiftsAssigned = true;
+        }
+
         while (!exit) {
             System.out.println("\nManager Menu:");
             System.out.println("1. Auto-Assign Shifts");
             System.out.println("2. View Weekly Schedule");
             System.out.println("3. View Pings");
-            System.out.println("4. Exit");
+            System.out.println("4. Respond to Ping");
+            System.out.println("5. Exit");
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
@@ -175,7 +200,7 @@ public class SchedulerApp
                     if (shiftsAssigned) 
                     {
                         Schedule.viewWeeklySchedule(); // View the weekly schedule
-                    } 
+                    }
                     else 
                     {
                         System.out.println("Please auto-assign shifts first."); // If shifts are not assigned, prompt to auto-assign first
@@ -185,13 +210,18 @@ public class SchedulerApp
                     viewPings(); // View pings from employees
                     break;
                 case 4:
-                    exit = true;
+                    respondToPing(scanner); // Respond to a ping
+                    break;
+                case 5:
+                    exit = true; // Exit the program
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
         }
     }
+
+
 
     private static void createNewEmployee(Scanner scanner)  //create a new employee
     {
@@ -452,10 +482,63 @@ public class SchedulerApp
         }
     }
 
+    private static void updateEmployeeSchedule(Scanner scanner, String employeeID) {
+        List<String> fileContent = new ArrayList<>();
+        boolean employeeFound = false;
+        int scheduleStartIndex = -1;
+    
+        // Read the entire file content
+        try (BufferedReader reader = new BufferedReader(new FileReader(EMPLOYEE_FILE))) {
+            String line;
+            int lineIndex = 0;
+            while ((line = reader.readLine()) != null) {
+                fileContent.add(line);
+                if (line.equals("Employee ID: " + employeeID)) {
+                    employeeFound = true;
+                }
+                if (employeeFound && line.startsWith("Schedule:")) {
+                    scheduleStartIndex = lineIndex + 1;
+                    break;
+                }
+                lineIndex++;
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading employee file: " + e.getMessage());
+            return;
+        }
+    
+        if (!employeeFound) {
+            System.out.println("Employee not found.");
+            return;
+        }
+    
+        // Get the new schedule
+        String newSchedule = setCustomSchedule(scanner);
+    
+        // Update the file content with the new schedule
+        int scheduleEndIndex = scheduleStartIndex;
+        while (scheduleEndIndex < fileContent.size() && !fileContent.get(scheduleEndIndex).equals("------------------------------")) {
+            scheduleEndIndex++;
+        }
+    
+        fileContent.subList(scheduleStartIndex, scheduleEndIndex).clear();
+        fileContent.addAll(scheduleStartIndex, Arrays.asList(newSchedule.split("\n")));
+    
+        // Write the updated content back to the file
+        try (FileWriter writer = new FileWriter(EMPLOYEE_FILE)) {
+            for (String line : fileContent) {
+                writer.write(line + "\n");
+            }
+            System.out.println("Schedule updated successfully.");
+        } catch (IOException e) {
+            System.out.println("Error updating schedule: " + e.getMessage());
+        }
+    }
+
     private static void pingMyManager(Scanner scanner, String employeeID) //ping manager ie make requests, ask questions, etc
     {
         String employeeName = Employee.getEmployeeName(employeeID); // Get the employee name from the ID to include in the ping
-
+        String pingID = generateUniquePingId(); // Generate a unique ping ID
         System.out.println("\nPing My Manager");
         System.out.println("1. Request Extra Hours");
         System.out.println("2. Request a Shift Swap");
@@ -498,16 +581,22 @@ public class SchedulerApp
         // Save the ping message to ping.txt
         try (FileWriter writer = new FileWriter("src/ping.txt", true)) 
         {
+            writer.write("Ping ID: " + pingID + "\n");
             writer.write("Employee ID: " + employeeID + "\n");
             writer.write("Employee Name: " + employeeName + "\n");
             writer.write(pingMessage + "\n");
+            writer.write("Status: Pending\n");
             writer.write("----------------------------------\n");
-            System.out.println("Ping sent to the manager.");
+            System.out.println("Ping sent to the manager. Your Ping ID is:" +pingID);
         } 
         catch (IOException e) 
         {
             System.out.println("Error saving the ping: " + e.getMessage()); // Print the error message if an exception occurs
         }
+    }
+
+    private static String generateUniquePingId() {
+        return "PING-" + System.currentTimeMillis();
     }
 
     private static void viewPings() //view pings from employees
@@ -534,14 +623,101 @@ public class SchedulerApp
             System.out.println("Error reading pings: " + e.getMessage());
         }
     
-        // Delete the ping.txt file after viewing. Like snapChat
-        if (pingFile.delete()) 
-        {
-            System.out.println("Pings have been marked as read and deleted."); // Confirmation message
-        } 
-        else 
-        {
-            System.out.println("Error deleting the ping file.");
+        // Delete the ping.txt file after viewing. Like snapChat 
+        // cant use with the responding to pings... wil implement later
+        // if (pingFile.delete()) 
+        // {
+        //     System.out.println("Pings have been marked as read and deleted."); // Confirmation message
+        // } 
+        // else 
+        // {
+        //     System.out.println("Error deleting the ping file.");
+        // }
+    }
+
+    private static void respondToPing(Scanner scanner) {
+        System.out.print("Enter the Ping ID to respond to: ");
+        String pingId = scanner.nextLine().trim();
+    
+        List<String> fileContent = new ArrayList<>();
+        boolean pingFound = false;
+        int pingStartIndex = -1;
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/ping.txt"))) {
+            String line;
+            int lineIndex = 0;
+            while ((line = reader.readLine()) != null) {
+                fileContent.add(line);
+                if (line.equals("Ping ID: " + pingId)) {
+                    pingFound = true;
+                    pingStartIndex = lineIndex;
+                    // Read and display the ping details
+                    System.out.println("\nPing Details:");
+                    for (int i = 0; i < 4 && lineIndex + i < fileContent.size(); i++) {
+                        System.out.println(fileContent.get(lineIndex + i));
+                    }
+                    break;
+                }
+                lineIndex++;
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading pings: " + e.getMessage());
+            return;
+        }
+    
+        if (!pingFound) {
+            System.out.println("Ping not found.");
+            return;
+        }
+    
+        System.out.print("\nEnter your response: ");
+        String response = scanner.nextLine();
+    
+        // Update the ping.txt file with the response
+        try (FileWriter writer = new FileWriter("src/ping.txt")) {
+            for (int i = 0; i < fileContent.size(); i++) {
+                String line = fileContent.get(i);
+                writer.write(line + "\n");
+                if (i == pingStartIndex) {
+                    // Write the original ping content
+                    for (int j = 1; j < 5 && i + j < fileContent.size(); j++) {
+                        writer.write(fileContent.get(i + j) + "\n");
+                    }
+                    // Write the response
+                    writer.write("Status: Responded\n");
+                    writer.write("Manager Response: " + response + "\n");
+                    writer.write("----------------------------------\n");
+                    i += 5; // Skip the original ping content
+                }
+            }
+            System.out.println("Response saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Error saving the response: " + e.getMessage());
+        }
+    }
+
+    private static void viewMyPingResponses(Scanner scanner, String employeeID) {
+        System.out.println("\nViewing Your Ping Responses:");
+        boolean responsesFound = false;
+    
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/ping.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.equals("Employee ID: " + employeeID)) {
+                    responsesFound = true;
+                    // Display the ping and its response
+                    for (int i = 0; i < 7; i++) {
+                        System.out.println(reader.readLine());
+                    }
+                    System.out.println("----------------------------------");
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading pings: " + e.getMessage());
+        }
+    
+        if (!responsesFound) {
+            System.out.println("No responses found for your pings.");
         }
     }
     

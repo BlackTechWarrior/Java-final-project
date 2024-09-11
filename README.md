@@ -33,12 +33,12 @@
   <li><strong>Enhanced Security</strong>: Implemented password masking during input, significantly improving security and user privacy.</li>
   <li><strong>Automated Scheduling</strong>: Replaced manual schedule editing with an intelligent auto-assign feature:
     <ul>
-      <li>Employees can input their availability</li>
+      <li>Employees can input their availability and also update it later on</li>
       <li>Schedules are automatically generated based on employee availability</li>
       <li>Implemented a constraint to ensure no more than two team leads are scheduled simultaneously</li>
     </ul>
   </li>
-  <li><strong>Improved User Experience</strong>: The application now more closely emulates real-life work scheduling systems, making it more intuitive and user-friendly.</li>
+  <li><strong>Improved User Experience</strong>: The application now more closely emulates real-life work scheduling systems, making it more intuitive and user-friendly. <br>One example would be through "pings". Employees can "ping" a manager and wait for a response.</li>
 </ol>
 
 <h2>Technical Highlights</h2>
@@ -54,7 +54,7 @@
 
 <h3>Code Statistics:</h3>
 <ul>
-  <li>Lines of code: ~1,200</li>
+  <li>Lines of code: ~1,500</li>
 </ul>
 
 <h2>Learning Outcomes</h2>
@@ -75,6 +75,8 @@
   <li>Implement a graphical user interface (GUI) for improved usability</li>
   <li>Integrate with external calendar systems</li>
   <li>Develop a mobile/ web application version</li>
+  <li>Make pings more robust by separating chat logs on employees side to keep it private.<br>This can be some sort of simulated chat, where one can follow up as well. </li>
+  <li>Give managers more functionality with the schedule, edit it, remove or add employees etc. </li>
 </ul>
 
 <hr>
