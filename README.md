@@ -54,7 +54,7 @@
 
 <h3>Code Statistics:</h3>
 <ul>
-  <li>Lines of code: ~2,500</li>
+  <li>Lines of code: ~1,200</li>
 </ul>
 
 <h2>Learning Outcomes</h2>
